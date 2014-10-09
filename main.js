@@ -50,7 +50,13 @@ function init() {
     };	
 
 	var cu_icon = L.icon({
-		iconUrl: "cu_marker.png"
+		iconUrl: "cu_marker.png",
+		iconAnchor: [12.5, 41]
+	});
+
+	var pr_icon = L.icon({
+		iconUrl: "pr_marker.png",
+		iconAnchor: [12.5, 41]
 	});
 	
     function createPraesPopup(feature, layer){
@@ -58,22 +64,12 @@ function init() {
             '</b><br>Durchschnittsumsatz: € ' + feature.properties.umsatz + ',- pro Monat <br>'/* + 
             '<button type="button" value="" onClick="toggleCustomers()">Kunden zeigen</button>'*/;
         layer.bindPopup(popupContent);
+		layer.setIcon(pr_icon);
     }
 
     function createCustomerPopup(feature, layer){
         var popupContent = '<b>' + feature.properties.name;
         layer.bindPopup(popupContent);
+		layer.setIcon(cu_icon);
     }
-    
-
-	
-     var topLayers = {
-        "Präsentatorinnen": praes,
-		"Kunden": customers
-    };
-	
-	
-
-    //L.control.layers({}, topLayers).addTo(map);
-
 }
