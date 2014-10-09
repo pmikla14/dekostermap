@@ -1,4 +1,5 @@
-var data;
+var data,
+	data_customers;
 data = [
 	{
 	  "type": "Feature",
@@ -8,29 +9,7 @@ data = [
 	  },
 	  "properties": {
 	    "name": "Susi Musterfrau",
-	    "umsatz": "2000",
-	    "kunden": {
-	    	{
-				"type": "Feature",
-				"geometry": {
-				  "type": "Point",
-				  "coordinates": [14.34, 46.23]
-				},
-				"properties": {
-				  "name": "Kunde 1"
-				  }
-				},
-				{
-				  "type": "Feature",
-				  "geometry": {
-				    "type": "Point",
-				    "coordinates": [14.657, 46.356]
-				  },
-				  "properties": {
-				    "name": "Kunde 1"
-				    }
-				}	    
-				}
+	    "umsatz": "2000"
 	  }
 	},
 	{
@@ -41,10 +20,43 @@ data = [
 	  },
 	  "properties": {
 	    "name": "Max Mustermann",
-	    "umsatz": "2000",
-	    "kunden": {"Name Kunde3": [46.56, 14.21],
-		    	   "Name Kunde4": [46.123, 14.43]
-	    }
+	    "umsatz": "2000"
+	  }
+	}
+];
+
+data_customers = [
+	{
+	  "type": "Feature",
+	  "geometry": {
+	    "type": "Point",
+	    "coordinates": [14.67, 46.253]
+	  },
+	  "properties": {
+	    "name": "Kunde 1",
+	    "praes": "Susi Musterfrau"
+	  }
+	},
+	{
+	  "type": "Feature",
+	  "geometry": {
+	    "type": "Point",
+	    "coordinates": [14.56, 46.867]
+	  },
+	  "properties": {
+	    "name": "Kunde 2",
+	    "praes": "Max Mustermann"
+	  }
+	},
+	{
+	  "type": "Feature",
+	  "geometry": {
+	    "type": "Point",
+	    "coordinates": [14.23, 46.567]
+	  },
+	  "properties": {
+	    "name": "Kunde 3",
+	    "praes": "Max Mustermann"
 	  }
 	}
 ];
