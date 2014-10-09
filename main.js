@@ -1,6 +1,8 @@
 function init() {
 	var	sw = L.latLng(45.4601306, 5.009765),
-		ne = L.latLng(55.3291444, 17.666015);	
+		ne = L.latLng(55.3291444, 17.666015),
+		cu = document.getElementById("filter-customers"),
+		pr = document.getElementById("filter-praese");	
 	var area = L.latLngBounds(sw, ne);
 	
 	var map = L.map('map', {
@@ -22,20 +24,42 @@ function init() {
     
     var praes = L.geoJson().addTo(map);
     var customers = L.geoJson();
+	
+	cu.onclick = function(e) {
+        pr.className = '';
+        this.className = 'active';
+        // The setFilter function takes a GeoJSON feature object
+        // and returns true to show it or false to hide it.
+        /*map.featureLayer.setFilter(function(f) {
+            return f.properties['marker-symbol'] === 'fast-food';
+        });
+        return false;*/
+    };
+
+    pr.onclick = function() {
+        cu.className = '';
+        this.className = 'active';
+        /*map.featureLayer.setFilter(function(f) {
+            // Returning true for all markers shows everything.
+            return true;
+        });
+        return false;*/
+    };
    
 	function createCustomerPopup(feature, layer){
         var popupContent = '<b>' + feature.properties.name +
             '</b>';
         layer.bindPopup(popupContent);    
-	}
-	function toggleCustomers(nameOfPresenter){
-	    praes.removeFrom(map);
-    }
-		
+	}		
+
+	var cu_icon = L.icon({
+		iconUrl: "cu_marker.png"
+	});
+	
     function createPraesPopup(feature, layer){
         var popupContent = '<b>' + feature.properties.name +
-            '</b><br>Durchschnittsumsatz: € ' + feature.properties.umsatz + ',- pro Monat <br>' + 
-            '<button type="button" value="" onclick="toggleCustomers();">Kunden zeigen</button>';
+            '</b><br>Durchschnittsumsatz: € ' + feature.properties.umsatz + ',- pro Monat <br>'/* + 
+            '<button type="button" value="" onClick="toggleCustomers()">Kunden zeigen</button>'*/;
         layer.bindPopup(popupContent);
         }
 
@@ -51,7 +75,9 @@ function init() {
         "Präsentatorinnen": praes,
 		"Kunden": customers
     };
+	
+	
 
-    L.control.layers({}, topLayers).addTo(map);
+    //L.control.layers({}, topLayers).addTo(map);
 
 }
