@@ -1,3 +1,10 @@
+    function toggleCustomers(nameOfPresenter){
+	    praes.removeFrom(map);
+	    /*L.geoJson(data_customers, {
+        	onEachFeature: createCustomers(nameOfPresenter)
+        }).addTo(customers);*/
+    }
+
 function init() {
 	console.log("Begin");
 	var	sw = L.latLng(45.4601306, 5.009765),
@@ -24,12 +31,7 @@ function init() {
     var praes = L.geoJson().addTo(map);
     var customers = L.geoJson();
     
-    function toggleCustomers(nameOfPresenter){
-	    praes.removeFrom(map);
-	    /*L.geoJson(data_customers, {
-        	onEachFeature: createCustomers(nameOfPresenter)
-        }).addTo(customers);*/
-    }
+
     
 	function createCustomerPopup(feature, layer){
         var popupContent = '<b>' + feature.properties.name +
