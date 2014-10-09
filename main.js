@@ -23,34 +23,31 @@ function init() {
     map.addLayer(terrain);
     
     var praes = L.geoJson().addTo(map);
-    var customers = L.geoJson();
+    var customers = L.geoJson().addTo(map);
 	
 	cu.onclick = function(e) {
         pr.className = '';
         this.className = 'active';
-        // The setFilter function takes a GeoJSON feature object
-        // and returns true to show it or false to hide it.
-        /*map.featureLayer.setFilter(function(f) {
-            return f.properties['marker-symbol'] === 'fast-food';
-        });
-        return false;*/
+        
+		L.geoJson(data_customers, {
+			onEachFeature: createCustomerPopup
+		}).addTo(customers);
+		
+		customers.addTo(map);
+		map.removeLayer(praes);
     };
-
-    pr.onclick = function() {
+    
+	pr.onclick = function() {
         cu.className = '';
         this.className = 'active';
-        /*map.featureLayer.setFilter(function(f) {
-            // Returning true for all markers shows everything.
-            return true;
-        });
-        return false;*/
-    };
-   
-	function createCustomerPopup(feature, layer){
-        var popupContent = '<b>' + feature.properties.name +
-            '</b>';
-        layer.bindPopup(popupContent);    
-	}		
+		
+		L.geoJson(data, {
+			onEachFeature: createPraesPopup
+		}).addTo(praes);
+		
+		praes.addTo(map);
+		map.removeLayer(customers);
+    };	
 
 	var cu_icon = L.icon({
 		iconUrl: "cu_marker.png"
@@ -61,15 +58,14 @@ function init() {
             '</b><br>Durchschnittsumsatz: € ' + feature.properties.umsatz + ',- pro Monat <br>'/* + 
             '<button type="button" value="" onClick="toggleCustomers()">Kunden zeigen</button>'*/;
         layer.bindPopup(popupContent);
-        }
+    }
 
-    L.geoJson(data, {
-        onEachFeature: createPraesPopup
-    }).addTo(praes);
+    function createCustomerPopup(feature, layer){
+        var popupContent = '<b>' + feature.properties.name;
+        layer.bindPopup(popupContent);
+    }
     
-	L.geoJson(data_customers, {
-        onEachFeature: createCustomerPopup
-    }).addTo(customers);
+
 	
      var topLayers = {
         "Präsentatorinnen": praes,
