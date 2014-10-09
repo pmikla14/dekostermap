@@ -24,23 +24,19 @@ function init() {
     var praes = L.geoJson().addTo(map);
     var customers = L.geoJson();
     
-    //TO EDIT
-    function createCustomers(nameOfPresenter){
-	    var popupContent = '<b>' + feature.properties.name +
-            '</b><br>Durchschnittsumsatz: € ' + feature.properties.umsatz + ',- pro Monat <br>' + 
-            '<button type="button" value="" onclick="toggleCustomers(feature.properties.name)">Kunden zeigen</button>';
-        layer.bindPopup(popupContent);
-
-    }
-    
     function toggleCustomers(nameOfPresenter){
 	    praes.removeFrom(map);
-	    L.geoJson(data, {
+	    /*L.geoJson(data_customers, {
         	onEachFeature: createCustomers(nameOfPresenter)
-        }).addTo(customers);
-
+        }).addTo(customers);*/
     }
     
+	function createCustomerPopup(feature, layer){
+        var popupContent = '<b>' + feature.properties.name +
+            '</b>';
+        layer.bindPopup(popupContent);    
+	}
+		
     function createPraesPopup(feature, layer){
         var popupContent = '<b>' + feature.properties.name +
             '</b><br>Durchschnittsumsatz: € ' + feature.properties.umsatz + ',- pro Monat <br>' + 
@@ -52,8 +48,13 @@ function init() {
         onEachFeature: createPraesPopup
     }).addTo(praes);
     
+	L.geoJson(data_customers, {
+        onEachFeature: createCustomerPopup
+    }).addTo(customers);
+	
      var topLayers = {
-        "Präsentatorinnen": praes
+        "Präsentatorinnen": praes,
+		"Kunden": customers
     };
 
     L.control.layers({}, topLayers).addTo(map);
