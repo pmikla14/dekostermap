@@ -1,12 +1,4 @@
-    function toggleCustomers(nameOfPresenter){
-	    praes.removeFrom(map);
-	    /*L.geoJson(data_customers, {
-        	onEachFeature: createCustomers(nameOfPresenter)
-        }).addTo(customers);*/
-    }
-
 function init() {
-	console.log("Begin");
 	var	sw = L.latLng(45.4601306, 5.009765),
 		ne = L.latLng(55.3291444, 17.666015);	
 	var area = L.latLngBounds(sw, ne);
@@ -30,19 +22,20 @@ function init() {
     
     var praes = L.geoJson().addTo(map);
     var customers = L.geoJson();
-    
-
-    
+   
 	function createCustomerPopup(feature, layer){
         var popupContent = '<b>' + feature.properties.name +
             '</b>';
         layer.bindPopup(popupContent);    
 	}
+	function toggleCustomers(nameOfPresenter){
+	    praes.removeFrom(map);
+    }
 		
     function createPraesPopup(feature, layer){
         var popupContent = '<b>' + feature.properties.name +
             '</b><br>Durchschnittsumsatz: € ' + feature.properties.umsatz + ',- pro Monat <br>' + 
-            '<button type="button" value="" onclick="toggleCustomers(feature.properties.name)">Kunden zeigen</button>';
+            '<button type="button" value="" onclick="toggleCustomers();">Kunden zeigen</button>';
         layer.bindPopup(popupContent);
         }
 
