@@ -9,7 +9,7 @@ data = [
 	  },
 	  "properties": {
 	    "name": "Susi Musterfrau",
-	    "umsatz": "2000"
+	    "umsatz": "645"
 	  }
 	},
 	{
@@ -20,7 +20,7 @@ data = [
 	  },
 	  "properties": {
 	    "name": "Max Mustermann",
-	    "umsatz": "2000"
+	    "umsatz": "1054"
 	  }
 	}
 ];

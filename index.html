@@ -4,8 +4,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<link rel="stylesheet" href="style.css">
-		
-		<script src="main.js"></script> 
+		<!-- GeoJSON Daten -->
 		<script src="data.js"></script> 
 		
 		<!-- Latest Leaflet -->
@@ -14,9 +13,7 @@
 		
 	</head>
 	<body>
-
 		<div class="head"><img src="logo.png"></div>
-
 
 		<div id="map">
 			<nav id='menu-ui' class='menu-ui'>
@@ -25,7 +22,105 @@
 			</nav>
 		</div>
 		<script>
-			window.addEventListener('load', init);
+		var	sw = L.latLng(45.4601306, 5.009765),
+			ne = L.latLng(55.3291444, 17.666015),
+			cu_button = document.getElementById("filter-customers"),
+			pr_button = document.getElementById("filter-praese"),
+			showButton = document.getElementById("showButtonInit");
+			
+		var area = L.latLngBounds(sw, ne);
+	
+		var map = L.map('map', {
+			fadeAnimation: true,
+			inertia: true,
+			detectRetina: true,
+			metric: true
+		}).fitBounds(area);
+
+		var mapboxUrl = 'http://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png';
+		var mapboxAttr = 'Karte &copy; Mapbox.com, Daten &copy; dekoster GmbH';
+
+		var terrain = L.tileLayer(mapboxUrl, {
+			attribution: mapboxAttr,
+			maxZoom: 19,
+			id: "phipse.jn8f5126"
+		});
+		map.addLayer(terrain);
+		
+		var praes = L.geoJson().addTo(map);
+		var customers = L.geoJson().addTo(map);
+		var specificCustomers = L.geoJson().addTo(map);
+			
+		cu_button.onclick = function(e) {
+			pr_button.className = '';
+			this.className = 'active';
+			
+			L.geoJson(data_customers, {
+				onEachFeature: createCustomerPopup
+			}).addTo(customers);
+			
+			customers.addTo(map);
+			map.removeLayer(praes);
+			map.removeLayer(specificCustomers);
+			
+		};
+		
+		pr_button.onclick = function() {
+			cu_button.className = '';
+			this.className = 'active';
+			
+			L.geoJson(data, {
+				onEachFeature: createPraesPopup
+			}).addTo(praes);
+			
+			praes.addTo(map);
+			map.removeLayer(customers);
+			map.removeLayer(specificCustomers);
+		};	
+
+		var cu_icon = L.icon({
+			iconUrl: "cu_marker.png",
+			iconAnchor: [12.5, 41]
+		});
+
+		var pr_icon = L.icon({
+			iconUrl: "pr_marker.png",
+			iconAnchor: [12.5, 41]
+		});
+		
+		function createPraesPopup(feature, layer){
+			var popupContent = '<b>' + feature.properties.name +
+				'</b><br>Durchschnittsumsatz: € ' + feature.properties.umsatz + ',- pro Monat <br>' + 
+				'<div id="showButton" class="button" value="" onclick="filterCustomersByPraes(\'' + feature.properties.name + '\');" ><a href="#">Kunden zeigen</a></div>';
+			layer.bindPopup(popupContent);
+			layer.setIcon(pr_icon);
+		}
+
+		function createCustomerPopup(feature, layer){
+			var popupContent = '<b>' + feature.properties.name + '</b>';
+			layer.bindPopup(popupContent);
+			layer.setIcon(cu_icon);
+		}
+		
+		function filterCustomersByPraes(name){
+		
+			specificCustomers = "";
+			specificCustomers = L.geoJson();
+			
+			L.geoJson(data_customers, {
+				onEachFeature: createCustomerPopup,
+				filter: function(feature, layer){ return feature.properties.praes == name; }
+			}).addTo(specificCustomers);
+			
+			L.geoJson(data, {
+				onEachFeature: createPraesPopup,
+				filter: function(feature, layer){ return feature.properties.name == name; }
+			}).addTo(specificCustomers);
+			
+			specificCustomers.addTo(map);
+			map.removeLayer(customers);
+			map.removeLayer(praes);
+		}
 		</script>
 		<div id="showButtonInit" style="display:none;"></div>
 	</body>
