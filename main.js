@@ -1,8 +1,10 @@
 function init() {
 	var	sw = L.latLng(45.4601306, 5.009765),
 		ne = L.latLng(55.3291444, 17.666015),
-		cu = document.getElementById("filter-customers"),
-		pr = document.getElementById("filter-praese");	
+		cu_button = document.getElementById("filter-customers"),
+		pr_button = document.getElementById("filter-praese"),
+		showButton = document.getElementById("showButtonInit");
+		
 	var area = L.latLngBounds(sw, ne);
 	
 	var map = L.map('map', {
@@ -25,8 +27,10 @@ function init() {
     var praes = L.geoJson().addTo(map);
     var customers = L.geoJson().addTo(map);
 	
-	cu.onclick = function(e) {
-        pr.className = '';
+
+	
+	cu_button.onclick = function(e) {
+        pr_button.className = '';
         this.className = 'active';
         
 		L.geoJson(data_customers, {
@@ -37,8 +41,8 @@ function init() {
 		map.removeLayer(praes);
     };
     
-	pr.onclick = function() {
-        cu.className = '';
+	pr_button.onclick = function() {
+        cu_button.className = '';
         this.className = 'active';
 		
 		L.geoJson(data, {
@@ -47,6 +51,7 @@ function init() {
 		
 		praes.addTo(map);
 		map.removeLayer(customers);
+
     };	
 
 	var cu_icon = L.icon({
@@ -61,8 +66,8 @@ function init() {
 	
     function createPraesPopup(feature, layer){
         var popupContent = '<b>' + feature.properties.name +
-            '</b><br>Durchschnittsumsatz: € ' + feature.properties.umsatz + ',- pro Monat <br>'/* + 
-            '<button type="button" value="" onClick="toggleCustomers()">Kunden zeigen</button>'*/;
+            '</b><br>Durchschnittsumsatz: € ' + feature.properties.umsatz + ',- pro Monat <br>' + 
+            '<div id="showButton" class="button" value="' + feature.properties.name + '" ><a href="#">Kunden zeigen</a></div>';
         layer.bindPopup(popupContent);
 		layer.setIcon(pr_icon);
     }
@@ -72,4 +77,14 @@ function init() {
         layer.bindPopup(popupContent);
 		layer.setIcon(cu_icon);
     }
+	showButton.onlick = function(e) {
+		console.log("Test");
+	}
+	
+	praes.on('popupopen', function(e) {
+		showButton = document.getElementById("showButton");
+		console.log(showButton);
+		
+
+	});
 }
